@@ -58,17 +58,17 @@ const AdminConfig = () => {
 
   const updateMutation = useMutation({
     mutationFn: async (data: Record<string, string>) => {
-      const updates = Object.entries(data).map(([key, value]) =>
-        supabase
+      // Use upsert to create records if they don't exist
+      const updates = Object.entries(data).map(([key, value]) => ({
+        key,
+        value,
+      }));
+
+      for (const update of updates) {
+        const { error } = await supabase
           .from("site_config")
-          .update({ value })
-          .eq("key", key)
-      );
-      
-      const results = await Promise.all(updates);
-      const errors = results.filter((r) => r.error);
-      if (errors.length > 0) {
-        throw new Error("Erro ao atualizar configurações");
+          .upsert(update, { onConflict: "key" });
+        if (error) throw error;
       }
     },
     onSuccess: () => {

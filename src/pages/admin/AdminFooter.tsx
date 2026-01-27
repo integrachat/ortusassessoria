@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -45,7 +45,7 @@ const AdminFooter = () => {
   });
 
   // Update form when config loads
-  useState(() => {
+  useEffect(() => {
     if (config) {
       setFormData({
         company_name: config.company_name || "",
@@ -58,7 +58,7 @@ const AdminFooter = () => {
         twitter_url: config.twitter_url || "",
       });
     }
-  });
+  }, [config]);
 
   // Sync formData with config when it changes
   const syncedFormData = {
