@@ -13,6 +13,7 @@ import {
   Briefcase,
   Menu,
   X,
+  Users,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -29,6 +30,7 @@ const navItems = [
   { href: "/admin/noticias", icon: Newspaper, label: "Notícias" },
   { href: "/admin/faq", icon: HelpCircle, label: "FAQ" },
   { href: "/admin/paginas", icon: FileText, label: "Páginas" },
+  { href: "/admin/usuarios", icon: Users, label: "Usuários" },
 ];
 
 const Admin = () => {
