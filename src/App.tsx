@@ -16,6 +16,7 @@ import AdminPages from "./pages/admin/AdminPages";
 import AdminHome from "./pages/admin/AdminHome";
 import AdminFooter from "./pages/admin/AdminFooter";
 import AdminSeo from "./pages/admin/AdminSeo";
+import AdminUsers from "./pages/admin/AdminUsers";
 import NewsPage from "./pages/NewsPage";
 import NewsDetail from "./pages/NewsDetail";
 import ServicesPage from "./pages/ServicesPage";
@@ -59,6 +60,7 @@ const App = () => (
             <Route path="noticias" element={<AdminNews />} />
             <Route path="faq" element={<AdminFaq />} />
             <Route path="paginas" element={<AdminPages />} />
+            <Route path="usuarios" element={<AdminUsers />} />
           </Route>
           
           <Route path="*" element={<NotFound />} />
