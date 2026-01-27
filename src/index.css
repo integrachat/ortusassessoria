@@ -1,0 +1,239 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Main brand colors - Teal/Green accounting theme */
+    --background: 0 0% 100%;
+    --foreground: 210 29% 24%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 210 29% 24%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 210 29% 24%;
+
+    /* Primary - Teal green */
+    --primary: 168 76% 42%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Light gray blue */
+    --secondary: 210 29% 97%;
+    --secondary-foreground: 210 29% 24%;
+
+    /* Muted */
+    --muted: 210 20% 96%;
+    --muted-foreground: 210 15% 50%;
+
+    /* Accent - Warm orange for CTAs */
+    --accent: 28 87% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 20% 90%;
+    --input: 210 20% 90%;
+    --ring: 168 76% 42%;
+
+    --radius: 0.75rem;
+
+    /* Custom tokens */
+    --heading: 210 29% 24%;
+    --text-body: 210 15% 40%;
+    --surface: 210 29% 97%;
+    --surface-hover: 210 25% 94%;
+    
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(168, 76%, 42%) 0%, hsl(168, 76%, 35%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(210, 29%, 97%) 0%, hsl(0, 0%, 100%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0, 0%, 100%) 0%, hsl(210, 29%, 99%) 100%);
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.12);
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 168 76% 42%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 29% 97%;
+    --sidebar-accent-foreground: 210 29% 24%;
+    --sidebar-border: 210 20% 90%;
+    --sidebar-ring: 168 76% 42%;
+  }
+
+  .dark {
+    --background: 210 29% 10%;
+    --foreground: 210 20% 95%;
+
+    --card: 210 29% 12%;
+    --card-foreground: 210 20% 95%;
+
+    --popover: 210 29% 12%;
+    --popover-foreground: 210 20% 95%;
+
+    --primary: 168 76% 50%;
+    --primary-foreground: 210 29% 10%;
+
+    --secondary: 210 29% 18%;
+    --secondary-foreground: 210 20% 95%;
+
+    --muted: 210 25% 20%;
+    --muted-foreground: 210 15% 60%;
+
+    --accent: 28 87% 55%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 210 25% 20%;
+    --input: 210 25% 20%;
+    --ring: 168 76% 50%;
+
+    --heading: 210 20% 95%;
+    --text-body: 210 15% 70%;
+    --surface: 210 29% 15%;
+    --surface-hover: 210 25% 18%;
+
+    --sidebar-background: 210 29% 10%;
+    --sidebar-foreground: 210 20% 95%;
+    --sidebar-primary: 168 76% 50%;
+    --sidebar-primary-foreground: 210 29% 10%;
+    --sidebar-accent: 210 29% 18%;
+    --sidebar-accent-foreground: 210 20% 95%;
+    --sidebar-border: 210 25% 20%;
+    --sidebar-ring: 168 76% 50%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold text-heading;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  p {
+    @apply text-body-text leading-relaxed;
+  }
+}
+
+@layer components {
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .section-padding {
+    @apply py-16 md:py-24;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-primary);
+  }
+
+  .card-shadow {
+    box-shadow: var(--shadow-card);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .card-shadow:hover {
+    box-shadow: var(--shadow-card-hover);
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 transition-all duration-300;
+    box-shadow: 0 4px 14px 0 hsla(168, 76%, 42%, 0.4);
+  }
+
+  .btn-primary:hover {
+    box-shadow: 0 6px 20px 0 hsla(168, 76%, 42%, 0.5);
+    transform: translateY(-1px);
+  }
+
+  .btn-accent {
+    @apply bg-accent text-accent-foreground hover:bg-accent/90 transition-all duration-300;
+    box-shadow: 0 4px 14px 0 hsla(28, 87%, 55%, 0.4);
+  }
+
+  .btn-accent:hover {
+    box-shadow: 0 6px 20px 0 hsla(28, 87%, 55%, 0.5);
+    transform: translateY(-1px);
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl lg:text-5xl font-bold text-heading mb-4;
+  }
+
+  .section-subtitle {
+    @apply text-lg md:text-xl text-body-text max-w-3xl;
+  }
+
+  .badge-primary {
+    @apply inline-flex items-center px-4 py-1.5 rounded-full text-sm font-medium bg-primary/10 text-primary;
+  }
+}
+
+@layer utilities {
+  .text-heading {
+    color: hsl(var(--heading));
+  }
+
+  .text-body-text {
+    color: hsl(var(--text-body));
+  }
+
+  .bg-surface {
+    background-color: hsl(var(--surface));
+  }
+
+  .animate-float {
+    animation: float 6s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
