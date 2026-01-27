@@ -17,7 +17,8 @@ const ServiceDetail = () => {
         .from("services")
         .select("*")
         .eq("slug", slug)
-        .single();
+        .eq("is_active", true)
+        .maybeSingle();
 
       if (error) throw error;
       return data;
