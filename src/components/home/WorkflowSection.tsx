@@ -1,13 +1,6 @@
 import { motion } from "framer-motion";
-import { FileText, Send, CheckCircle2, Headphones, LucideIcon } from "lucide-react";
 import { useHomeSections } from "@/hooks/useHomeSections";
-
-const iconMap: Record<string, LucideIcon> = {
-  FileText,
-  Send,
-  CheckCircle2,
-  Headphones,
-};
+import { Building2 } from "lucide-react";
 
 const WorkflowSection = () => {
   const { data: sections } = useHomeSections();
@@ -15,84 +8,93 @@ const WorkflowSection = () => {
 
   const steps = workflow?.steps || [
     {
-      icon: "FileText",
-      number: "01",
-      title: "Análise",
-      description: "Analisamos sua situação atual e identificamos as melhores soluções para seu negócio.",
+      number: "1",
+      title: "Comece Agora",
+      description: "Inicie o cadastro preenchendo nosso formulário",
+      color: "bg-primary",
     },
     {
-      icon: "Send",
-      number: "02",
-      title: "Proposta",
-      description: "Enviamos uma proposta personalizada com todos os serviços necessários.",
+      number: "2",
+      title: "Buscamos as informações",
+      description: "Entraremos em contato e analisaremos qual a sua necessidade",
+      color: "bg-coral",
     },
     {
-      icon: "CheckCircle2",
-      number: "03",
-      title: "Execução",
-      description: "Executamos todos os processos de forma ágil e eficiente.",
+      number: "3",
+      title: "Apoio Total",
+      description: "Nós fazemos a transferência contábil com o seu contador para você!",
+      color: "bg-coral",
     },
     {
-      icon: "Headphones",
-      number: "04",
-      title: "Suporte",
-      description: "Oferecemos suporte contínuo para todas as suas necessidades.",
+      number: "4",
+      title: "Parceria",
+      description: "Pronto! Sua empresa sempre em dia e com uma contabilidade completa.",
+      color: "bg-coral",
     },
   ];
 
   return (
-    <section className="section-padding bg-background">
+    <section className="py-20 bg-background relative overflow-hidden">
+      {/* Decorative shapes */}
+      <div className="absolute right-0 top-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-gradient-coral opacity-30 blur-3xl" />
+      
       <div className="container-custom">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <span className="badge-primary mb-4">
-            {workflow?.badge || "Passo a passo"}
-          </span>
-          <h2 className="section-title">
-            {workflow?.title || "Conheça o fluxo de trabalho e da otimização"}
-          </h2>
-          <p className="section-subtitle mx-auto">
-            {workflow?.subtitle || "Comece agora mesmo! Veja como é simples trabalhar com nossa equipe."}
-          </p>
-        </motion.div>
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
+          {/* Image */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="relative order-2 lg:order-1"
+          >
+            <div className="relative max-w-[350px] mx-auto lg:mx-0">
+              {/* Circular image placeholder */}
+              <div className="w-[280px] h-[280px] md:w-[350px] md:h-[350px] rounded-full overflow-hidden border-4 border-white shadow-xl mx-auto bg-muted flex items-center justify-center">
+                <Building2 size={64} className="text-foreground/20" />
+              </div>
+              
+              {/* Decorative circle */}
+              <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-coral rounded-full" />
+            </div>
+          </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {steps.map((step, index) => {
-            const Icon = iconMap[step.icon] || FileText;
-            return (
-              <motion.div
-                key={step.number}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                className="relative"
-              >
-                {/* Connector line */}
-                {index < steps.length - 1 && (
-                  <div className="hidden lg:block absolute top-10 left-[60%] w-full h-0.5 bg-border" />
-                )}
-                
-                <div className="text-center relative">
-                  <div className="relative inline-block mb-6">
-                    <div className="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center">
-                      <Icon size={36} className="text-primary-foreground" />
-                    </div>
-                    <div className="absolute -top-2 -right-2 w-8 h-8 bg-accent rounded-full flex items-center justify-center text-accent-foreground font-bold text-sm">
-                      {step.number}
-                    </div>
+          {/* Content */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="order-1 lg:order-2"
+          >
+            <span className="badge-primary mb-6">Passo a passo</span>
+            
+            <h2 className="text-3xl md:text-4xl font-bold text-heading mb-10">
+              {workflow?.title || "Conheça o fluxo de trabalho e da otimização"}
+            </h2>
+
+            {/* Steps */}
+            <div className="space-y-6">
+              {steps.map((step, index) => (
+                <motion.div
+                  key={step.title}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  className="flex items-start gap-4"
+                >
+                  <div className={`w-8 h-8 ${index === 0 ? 'bg-primary' : 'bg-coral'} rounded-full flex items-center justify-center flex-shrink-0`}>
+                    <span className="text-white font-bold text-sm">{index + 1}</span>
                   </div>
-                  <h3 className="text-xl font-bold text-heading mb-2">{step.title}</h3>
-                  <p className="text-body-text text-sm">{step.description}</p>
-                </div>
-              </motion.div>
-            );
-          })}
+                  <div>
+                    <h4 className="font-bold text-heading mb-1">{step.title}</h4>
+                    <p className="text-body-text text-sm">{step.description}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>

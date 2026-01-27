@@ -25,7 +25,9 @@ export interface FeaturesContent {
 export interface CtaContent {
   badge: string;
   title: string;
+  subtitle: string;
   description: string;
+  image_url: string;
   card1_title: string;
   card1_description: string;
   card2_title: string;
@@ -77,8 +79,10 @@ const defaultSections: HomeSections = {
   },
   cta: {
     badge: "Venha para Escritório Contábil",
-    title: "Escolha nosso escritório...",
-    description: "Traga já a sua empresa...",
+    title: "Venha para Escritório Contábil",
+    subtitle: "Escolha nosso escritório e dê adeus às preocupações com contabilidade.",
+    description: "Traga já a sua empresa para o nosso escritório e você aproveitará todos os benefícios de uma boa contabilidade.",
+    image_url: "",
     card1_title: "Abrir Empresa",
     card1_description: "Como abrir uma empresa?",
     card2_title: "Trocar de Contador",
