@@ -17,10 +17,14 @@ import {
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
+import { Search, PanelBottom } from "lucide-react";
+
 const navItems = [
   { href: "/admin", icon: LayoutDashboard, label: "Dashboard" },
   { href: "/admin/home", icon: Home, label: "Editor da Home" },
   { href: "/admin/configuracoes", icon: Settings, label: "Configurações do Site" },
+  { href: "/admin/rodape", icon: PanelBottom, label: "Rodapé" },
+  { href: "/admin/seo", icon: Search, label: "SEO e Analytics" },
   { href: "/admin/servicos", icon: Briefcase, label: "Serviços" },
   { href: "/admin/noticias", icon: Newspaper, label: "Notícias" },
   { href: "/admin/faq", icon: HelpCircle, label: "FAQ" },

@@ -14,6 +14,8 @@ import AdminNews from "./pages/admin/AdminNews";
 import AdminFaq from "./pages/admin/AdminFaq";
 import AdminPages from "./pages/admin/AdminPages";
 import AdminHome from "./pages/admin/AdminHome";
+import AdminFooter from "./pages/admin/AdminFooter";
+import AdminSeo from "./pages/admin/AdminSeo";
 import NewsPage from "./pages/NewsPage";
 import NewsDetail from "./pages/NewsDetail";
 import ServicesPage from "./pages/ServicesPage";
@@ -21,6 +23,7 @@ import ServiceDetail from "./pages/ServiceDetail";
 import ContactPage from "./pages/ContactPage";
 import PageDetail from "./pages/PageDetail";
 import Install from "./pages/Install";
+import SeoHead from "./components/layout/SeoHead";
 
 const queryClient = new QueryClient();
 
@@ -28,6 +31,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <BrowserRouter>
       <TooltipProvider>
+        <SeoHead />
         <Toaster />
         <Sonner />
         <Routes>
@@ -49,6 +53,8 @@ const App = () => (
             <Route index element={<AdminDashboard />} />
             <Route path="home" element={<AdminHome />} />
             <Route path="configuracoes" element={<AdminConfig />} />
+            <Route path="rodape" element={<AdminFooter />} />
+            <Route path="seo" element={<AdminSeo />} />
             <Route path="servicos" element={<AdminServices />} />
             <Route path="noticias" element={<AdminNews />} />
             <Route path="faq" element={<AdminFaq />} />
