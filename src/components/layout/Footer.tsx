@@ -1,104 +1,87 @@
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin, Facebook, Instagram, Linkedin, Youtube, Twitter } from "lucide-react";
+import { Phone, Mail, MapPin, Facebook, Instagram, Youtube } from "lucide-react";
 import { useSiteConfig } from "@/hooks/useSiteConfig";
 
 const Footer = () => {
   const { data: config } = useSiteConfig();
 
-  const socialLinks = [
-    { key: "facebook_url", icon: Facebook, label: "Facebook" },
-    { key: "instagram_url", icon: Instagram, label: "Instagram" },
-    { key: "linkedin_url", icon: Linkedin, label: "LinkedIn" },
-    { key: "youtube_url", icon: Youtube, label: "YouTube" },
-    { key: "twitter_url", icon: Twitter, label: "Twitter" },
+  const utilityLinks = [
+    { label: "Agenda do Empregador", href: "#" },
+    { label: "Declaração de Faturamento", href: "#" },
+    { label: "Certidão Negativa", href: "#" },
+    { label: "Previdência Social", href: "#" },
+    { label: "TED/DOC Bancária", href: "#" },
+  ];
+
+  const quickLinks = [
+    { label: "Home", href: "/" },
+    { label: "Quem Somos", href: "/institucional" },
+    { label: "Contabilidade", href: "/servicos/contabilidade" },
+    { label: "Trabalhista", href: "/servicos/trabalhista" },
+    { label: "Diversos", href: "/servicos" },
+  ];
+
+  const otherLinks = [
+    { label: "Simples Nacional", href: "#" },
+    { label: "Cadastrar Fiscal", href: "#" },
+    { label: "Modernização Social", href: "#" },
+    { label: "Encargos Sociais", href: "#" },
+    { label: "IRPF", href: "#" },
   ];
 
   return (
-    <footer className="bg-heading text-white">
+    <footer className="bg-primary text-white">
       {/* Main footer */}
-      <div className="container-custom section-padding">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* Company Info */}
+      <div className="container-custom py-16">
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
+          {/* Utility Links */}
           <div>
-            <div className="flex items-center gap-3 mb-6">
-              {config?.footer_logo_url ? (
-                <img
-                  src={config.footer_logo_url}
-                  alt={config?.company_name || "Logo"}
-                  className="h-12 w-auto object-contain"
-                />
-              ) : (
-                <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
-                  <span className="text-primary-foreground font-bold text-xl">EC</span>
-                </div>
-              )}
-              <div>
-                <h3 className="font-bold text-lg">{config?.company_name || "Escritório Contábil"}</h3>
-                <p className="text-sm text-white/70">Contabilidade Digital</p>
-              </div>
-            </div>
-            <p className="text-white/70 text-sm leading-relaxed">
-              {config?.footer_description || 
-                "Somos um escritório de contabilidade moderno e digital, preparado para atender todas as suas necessidades contábeis."}
-            </p>
+            <h4 className="font-bold text-lg mb-6">Utilitários</h4>
+            <ul className="space-y-3">
+              {utilityLinks.map((link) => (
+                <li key={link.label}>
+                  <a 
+                    href={link.href} 
+                    className="text-white/70 hover:text-white transition-colors text-sm"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-bold text-lg mb-6">Links Rápidos</h4>
+            <h4 className="font-bold text-lg mb-6 invisible">Links</h4>
             <ul className="space-y-3">
-              <li>
-                <Link to="/" className="text-white/70 hover:text-primary transition-colors text-sm">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link to="/institucional" className="text-white/70 hover:text-primary transition-colors text-sm">
-                  Institucional
-                </Link>
-              </li>
-              <li>
-                <Link to="/servicos" className="text-white/70 hover:text-primary transition-colors text-sm">
-                  Serviços
-                </Link>
-              </li>
-              <li>
-                <Link to="/noticias" className="text-white/70 hover:text-primary transition-colors text-sm">
-                  Informativo
-                </Link>
-              </li>
-              <li>
-                <Link to="/contato" className="text-white/70 hover:text-primary transition-colors text-sm">
-                  Contato
-                </Link>
-              </li>
+              {quickLinks.map((link) => (
+                <li key={link.label}>
+                  <Link 
+                    to={link.href}
+                    className="text-white/70 hover:text-white transition-colors text-sm"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Services */}
+          {/* Other Links */}
           <div>
-            <h4 className="font-bold text-lg mb-6">Serviços</h4>
+            <h4 className="font-bold text-lg mb-6 invisible">Outros</h4>
             <ul className="space-y-3">
-              <li>
-                <Link to="/servicos/assessoria" className="text-white/70 hover:text-primary transition-colors text-sm">
-                  Assessoria
-                </Link>
-              </li>
-              <li>
-                <Link to="/servicos/contabilidade" className="text-white/70 hover:text-primary transition-colors text-sm">
-                  Contabilidade
-                </Link>
-              </li>
-              <li>
-                <Link to="/servicos/migrar-mei-me" className="text-white/70 hover:text-primary transition-colors text-sm">
-                  Migrar MEI para ME
-                </Link>
-              </li>
-              <li>
-                <Link to="/servicos/trabalhista" className="text-white/70 hover:text-primary transition-colors text-sm">
-                  Trabalhista
-                </Link>
-              </li>
+              {otherLinks.map((link) => (
+                <li key={link.label}>
+                  <a 
+                    href={link.href}
+                    className="text-white/70 hover:text-white transition-colors text-sm"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -107,60 +90,48 @@ const Footer = () => {
             <h4 className="font-bold text-lg mb-6">Contato</h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <Phone size={18} className="text-primary mt-0.5 flex-shrink-0" />
+                <Phone size={16} className="text-white/70 mt-0.5 flex-shrink-0" />
                 <span className="text-white/70 text-sm">{config?.phone || "(00) 0000-0000"}</span>
               </li>
               <li className="flex items-start gap-3">
-                <Mail size={18} className="text-primary mt-0.5 flex-shrink-0" />
+                <Mail size={16} className="text-white/70 mt-0.5 flex-shrink-0" />
                 <span className="text-white/70 text-sm">{config?.email || "contato@empresa.com"}</span>
               </li>
               <li className="flex items-start gap-3">
-                <MapPin size={18} className="text-primary mt-0.5 flex-shrink-0" />
-                <span className="text-white/70 text-sm">{config?.address || "Rua Exemplo, 123 - Centro"}</span>
+                <MapPin size={16} className="text-white/70 mt-0.5 flex-shrink-0" />
+                <span className="text-white/70 text-sm">{config?.address || "Seu endereço aqui"}</span>
               </li>
             </ul>
-            
-            {/* Social Links */}
-            <div className="flex gap-4 mt-6">
-              {socialLinks.map(({ key, icon: Icon, label }) => {
-                const url = config?.[key];
-                if (!url) return null;
-                return (
-                  <a
-                    key={key}
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={label}
-                    className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-primary transition-colors"
-                  >
-                    <Icon size={18} />
-                  </a>
-                );
-              })}
-              {/* Show default icons if no social links configured */}
-              {!socialLinks.some(({ key }) => config?.[key]) && (
-                <>
-                  <a
-                    href="#"
-                    className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-primary transition-colors"
-                  >
-                    <Facebook size={18} />
-                  </a>
-                  <a
-                    href="#"
-                    className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-primary transition-colors"
-                  >
-                    <Instagram size={18} />
-                  </a>
-                  <a
-                    href="#"
-                    className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-primary transition-colors"
-                  >
-                    <Linkedin size={18} />
-                  </a>
-                </>
-              )}
+          </div>
+
+          {/* Social Links */}
+          <div>
+            <h4 className="font-bold text-lg mb-6">Redes Sociais</h4>
+            <div className="flex gap-3">
+              <a
+                href={config?.facebook_url || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors"
+              >
+                <Facebook size={18} />
+              </a>
+              <a
+                href={config?.instagram_url || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors"
+              >
+                <Instagram size={18} />
+              </a>
+              <a
+                href={config?.youtube_url || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors"
+              >
+                <Youtube size={18} />
+              </a>
             </div>
           </div>
         </div>
@@ -170,7 +141,10 @@ const Footer = () => {
       <div className="border-t border-white/10">
         <div className="container-custom py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-white/50">
-            <p>© {new Date().getFullYear()} {config?.company_name || "Escritório Contábil"}. Todos os direitos reservados.</p>
+            <p>
+              Copyright © {new Date().getFullYear()} | Direito reservado por{" "}
+              <span className="text-white">{config?.company_name || "Escritório Contábil"}</span>
+            </p>
             <div className="flex gap-6">
               <Link to="/politica-privacidade" className="hover:text-white transition-colors">
                 Política de Privacidade
@@ -182,6 +156,18 @@ const Footer = () => {
           </div>
         </div>
       </div>
+      
+      {/* WhatsApp floating button */}
+      <a
+        href={`https://wa.me/${config?.whatsapp || "5500900000000"}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 right-6 w-14 h-14 bg-green-500 rounded-full flex items-center justify-center shadow-lg hover:bg-green-600 transition-colors z-50"
+      >
+        <svg viewBox="0 0 24 24" className="w-7 h-7 text-white fill-current">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+      </a>
     </footer>
   );
 };

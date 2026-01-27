@@ -6,7 +6,7 @@ import ServicesSection from "@/components/home/ServicesSection";
 import NewsSection from "@/components/home/NewsSection";
 import WorkflowSection from "@/components/home/WorkflowSection";
 import FaqSection from "@/components/home/FaqSection";
-import WhatsappCta from "@/components/home/WhatsappCta";
+import PartnersSection from "@/components/home/PartnersSection";
 
 const Index = () => {
   return (
@@ -18,7 +18,7 @@ const Index = () => {
       <NewsSection />
       <WorkflowSection />
       <FaqSection />
-      <WhatsappCta />
+      <PartnersSection />
     </Layout>
   );
 };
