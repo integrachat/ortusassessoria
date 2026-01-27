@@ -1,9 +1,17 @@
 import { Link } from "react-router-dom";
-import { Phone, Mail, MapPin, Facebook, Instagram, Linkedin } from "lucide-react";
+import { Phone, Mail, MapPin, Facebook, Instagram, Linkedin, Youtube, Twitter } from "lucide-react";
 import { useSiteConfig } from "@/hooks/useSiteConfig";
 
 const Footer = () => {
   const { data: config } = useSiteConfig();
+
+  const socialLinks = [
+    { key: "facebook_url", icon: Facebook, label: "Facebook" },
+    { key: "instagram_url", icon: Instagram, label: "Instagram" },
+    { key: "linkedin_url", icon: Linkedin, label: "LinkedIn" },
+    { key: "youtube_url", icon: Youtube, label: "YouTube" },
+    { key: "twitter_url", icon: Twitter, label: "Twitter" },
+  ];
 
   return (
     <footer className="bg-heading text-white">
@@ -13,16 +21,25 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-xl">EC</span>
-              </div>
+              {config?.footer_logo_url ? (
+                <img
+                  src={config.footer_logo_url}
+                  alt={config?.company_name || "Logo"}
+                  className="h-12 w-auto object-contain"
+                />
+              ) : (
+                <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
+                  <span className="text-primary-foreground font-bold text-xl">EC</span>
+                </div>
+              )}
               <div>
                 <h3 className="font-bold text-lg">{config?.company_name || "Escritório Contábil"}</h3>
                 <p className="text-sm text-white/70">Contabilidade Digital</p>
               </div>
             </div>
             <p className="text-white/70 text-sm leading-relaxed">
-              Somos um escritório de contabilidade moderno e digital, preparado para atender todas as suas necessidades contábeis.
+              {config?.footer_description || 
+                "Somos um escritório de contabilidade moderno e digital, preparado para atender todas as suas necessidades contábeis."}
             </p>
           </div>
 
@@ -105,24 +122,45 @@ const Footer = () => {
             
             {/* Social Links */}
             <div className="flex gap-4 mt-6">
-              <a
-                href="#"
-                className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-primary transition-colors"
-              >
-                <Facebook size={18} />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-primary transition-colors"
-              >
-                <Instagram size={18} />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-primary transition-colors"
-              >
-                <Linkedin size={18} />
-              </a>
+              {socialLinks.map(({ key, icon: Icon, label }) => {
+                const url = config?.[key];
+                if (!url) return null;
+                return (
+                  <a
+                    key={key}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-primary transition-colors"
+                  >
+                    <Icon size={18} />
+                  </a>
+                );
+              })}
+              {/* Show default icons if no social links configured */}
+              {!socialLinks.some(({ key }) => config?.[key]) && (
+                <>
+                  <a
+                    href="#"
+                    className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-primary transition-colors"
+                  >
+                    <Facebook size={18} />
+                  </a>
+                  <a
+                    href="#"
+                    className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-primary transition-colors"
+                  >
+                    <Instagram size={18} />
+                  </a>
+                  <a
+                    href="#"
+                    className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center hover:bg-primary transition-colors"
+                  >
+                    <Linkedin size={18} />
+                  </a>
+                </>
+              )}
             </div>
           </div>
         </div>

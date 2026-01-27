@@ -26,6 +26,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, Plus, Pencil, Trash2, Save } from "lucide-react";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
+import ImageUpload from "@/components/ImageUpload";
 
 interface News {
   id: string;
@@ -256,17 +257,13 @@ const AdminNews = () => {
                 />
               </div>
 
-              <div>
-                <Label htmlFor="image_url">URL da Imagem</Label>
-                <Input
-                  id="image_url"
-                  value={formData.image_url}
-                  onChange={(e) =>
-                    setFormData({ ...formData, image_url: e.target.value })
-                  }
-                  placeholder="https://..."
-                />
-              </div>
+              <ImageUpload
+                label="Imagem de Capa"
+                value={formData.image_url}
+                onChange={(url) => setFormData({ ...formData, image_url: url })}
+                folder="news"
+                placeholder="Cole uma URL ou faça upload da imagem"
+              />
 
               <div className="flex items-center gap-2">
                 <Switch
@@ -309,6 +306,7 @@ const AdminNews = () => {
           <Table>
             <TableHeader>
               <TableRow>
+                <TableHead>Imagem</TableHead>
                 <TableHead>Título</TableHead>
                 <TableHead>Data</TableHead>
                 <TableHead>Status</TableHead>
@@ -318,6 +316,19 @@ const AdminNews = () => {
             <TableBody>
               {news?.map((item) => (
                 <TableRow key={item.id}>
+                  <TableCell>
+                    {item.image_url ? (
+                      <img
+                        src={item.image_url}
+                        alt={item.title}
+                        className="h-12 w-16 object-cover rounded"
+                      />
+                    ) : (
+                      <div className="h-12 w-16 bg-muted rounded flex items-center justify-center text-muted-foreground text-xs">
+                        Sem imagem
+                      </div>
+                    )}
+                  </TableCell>
                   <TableCell className="font-medium max-w-xs truncate">
                     {item.title}
                   </TableCell>
