@@ -47,14 +47,24 @@ const Header = () => {
           <div className="flex items-center justify-between h-20">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-3">
-              <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-xl">EC</span>
-              </div>
+              {config?.logo_url ? (
+                <img
+                  src={config.logo_url}
+                  alt={config?.company_name || "Logo"}
+                  className="h-12 w-auto object-contain"
+                />
+              ) : (
+                <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center">
+                  <span className="text-primary-foreground font-bold text-xl">EC</span>
+                </div>
+              )}
               <div className="hidden sm:block">
                 <h1 className="font-bold text-lg text-heading">
                   {config?.company_name || "Escritório Contábil"}
                 </h1>
-                <p className="text-xs text-muted-foreground">Contabilidade Digital</p>
+                <p className="text-xs text-muted-foreground">
+                  {config?.company_slogan || "Contabilidade Digital"}
+                </p>
               </div>
             </Link>
 
