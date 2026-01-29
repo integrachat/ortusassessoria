@@ -141,8 +141,10 @@ export const useUpdateHomeSection = () => {
     }) => {
       const { error } = await supabase
         .from("home_sections")
-        .update({ content: content as unknown as Record<string, never> })
-        .eq("section_key", sectionKey);
+        .upsert(
+          { section_key: sectionKey, content: content as unknown as Record<string, never> },
+          { onConflict: "section_key" }
+        );
 
       if (error) throw error;
     },
