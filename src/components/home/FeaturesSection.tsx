@@ -1,29 +1,41 @@
 import { motion } from "framer-motion";
-import { Check, User, LucideIcon } from "lucide-react";
+import { Check, User, LucideIcon, Sparkles, Zap, Shield } from "lucide-react";
 import { useHomeSections } from "@/hooks/useHomeSections";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const iconMap: Record<string, LucideIcon> = {
   Check,
   User,
-  Sparkles: Check,
-  Zap: Check,
-  Shield: User,
+  Sparkles,
+  Zap,
+  Shield,
 };
 
 const FeaturesSection = () => {
   const { data: sections } = useHomeSections();
   const features = sections?.features;
 
-  const items = features?.items || [
+  const items = features?.items?.length ? features.items : [
     {
       icon: "Check",
-      title: "Com Simplicidade",
-      description: "Com dinamismo e praticidade, fazemos todo o trabalho duro por você de forma simples, rápida e interativa.",
+      title: "Visão Estratégica",
+      description: "Transformamos obrigações em oportunidades de economia e potencializamos cada processo para gerar valor e inteligência para suas decisões.",
     },
     {
       icon: "User",
-      title: "Mais Praticidade",
-      description: "Somos um Escritório de Contabilidade com profissionais capacitados para facilitar sua vida e de sua empresa.",
+      title: "Tecnologia e Expertise",
+      description: "Utilizamos ferramentas de ponta aliadas a um time multidisciplinar altamente especializado, garantindo eficiência e precisão.",
+    },
+    {
+      icon: "Sparkles",
+      title: "Atendimento Personalizado",
+      description: "Cada cliente é único. Oferecemos soluções sob medida para atender às necessidades específicas do seu negócio.",
     },
   ];
 
@@ -44,6 +56,7 @@ const FeaturesSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
+            className="lg:pr-4"
           >
             <h2 className="text-2xl md:text-3xl font-bold text-heading leading-tight">
               {features?.title || "Contabilidade digital completa e pensada para sua empresa."}
@@ -53,26 +66,43 @@ const FeaturesSection = () => {
             </p>
           </motion.div>
 
-          {/* Feature cards */}
-          {items.slice(0, 2).map((feature, index) => {
-            const Icon = iconMap[feature.icon] || Check;
-            return (
-              <motion.div
-                key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: (index + 1) * 0.1 }}
-                className="bg-card rounded-3xl p-8 card-shadow"
-              >
-                <div className="w-14 h-14 bg-muted rounded-2xl flex items-center justify-center mb-6">
-                  <Icon size={24} className="text-primary" />
-                </div>
-                <h3 className="text-xl font-bold text-heading mb-3">{feature.title}</h3>
-                <p className="text-body-text text-sm leading-relaxed">{feature.description}</p>
-              </motion.div>
-            );
-          })}
+          {/* Feature cards carousel */}
+          <div className="lg:col-span-2">
+            <Carousel
+              opts={{
+                align: "start",
+                loop: true,
+              }}
+              className="w-full"
+            >
+              <CarouselContent className="-ml-4">
+                {items.map((feature, index) => {
+                  const Icon = iconMap[feature.icon] || Check;
+                  return (
+                    <CarouselItem key={index} className="pl-4 md:basis-1/2">
+                      <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: index * 0.1 }}
+                        className="bg-card rounded-3xl p-8 card-shadow h-full"
+                      >
+                        <div className="w-14 h-14 bg-muted rounded-2xl flex items-center justify-center mb-6">
+                          <Icon size={24} className="text-primary" />
+                        </div>
+                        <h3 className="text-xl font-bold text-heading mb-3">{feature.title}</h3>
+                        <p className="text-body-text text-sm leading-relaxed">{feature.description}</p>
+                      </motion.div>
+                    </CarouselItem>
+                  );
+                })}
+              </CarouselContent>
+              <div className="flex justify-center gap-2 mt-6">
+                <CarouselPrevious className="static translate-y-0" />
+                <CarouselNext className="static translate-y-0" />
+              </div>
+            </Carousel>
+          </div>
         </div>
       </div>
     </section>
