@@ -49,12 +49,19 @@ const AdminHome = () => {
     setEditedSections((prev) => {
       const currentSection =
         prev[sectionKey] || sections?.[sectionKey as keyof typeof sections];
-      const updated = JSON.parse(JSON.stringify(currentSection));
+      const updated = JSON.parse(JSON.stringify(currentSection || {}));
 
       const keys = fieldPath.split(".");
       let obj = updated;
       for (let i = 0; i < keys.length - 1; i++) {
-        obj = obj[keys[i]];
+        const key = keys[i];
+        const nextKey = keys[i + 1];
+        // Create intermediate object/array if it doesn't exist
+        if (obj[key] === undefined || obj[key] === null) {
+          // If next key is a number, create an array, otherwise create an object
+          obj[key] = /^\d+$/.test(nextKey) ? [] : {};
+        }
+        obj = obj[key];
       }
       obj[keys[keys.length - 1]] = value;
 
