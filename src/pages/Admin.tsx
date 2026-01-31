@@ -14,11 +14,12 @@ import {
   Menu,
   X,
   Users,
+  Handshake,
+  Search,
+  PanelBottom,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-
-import { Search, PanelBottom } from "lucide-react";
 
 const navItems = [
   { href: "/admin", icon: LayoutDashboard, label: "Dashboard" },
@@ -27,6 +28,7 @@ const navItems = [
   { href: "/admin/rodape", icon: PanelBottom, label: "Rodapé" },
   { href: "/admin/seo", icon: Search, label: "SEO e Analytics" },
   { href: "/admin/servicos", icon: Briefcase, label: "Serviços" },
+  { href: "/admin/parceiros", icon: Handshake, label: "Parceiros" },
   { href: "/admin/noticias", icon: Newspaper, label: "Notícias" },
   { href: "/admin/faq", icon: HelpCircle, label: "FAQ" },
   { href: "/admin/paginas", icon: FileText, label: "Páginas" },

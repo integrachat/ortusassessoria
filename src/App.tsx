@@ -17,6 +17,7 @@ import AdminHome from "./pages/admin/AdminHome";
 import AdminFooter from "./pages/admin/AdminFooter";
 import AdminSeo from "./pages/admin/AdminSeo";
 import AdminUsers from "./pages/admin/AdminUsers";
+import AdminPartners from "./pages/admin/AdminPartners";
 import NewsPage from "./pages/NewsPage";
 import NewsDetail from "./pages/NewsDetail";
 import ServicesPage from "./pages/ServicesPage";
@@ -57,6 +58,7 @@ const App = () => (
             <Route path="rodape" element={<AdminFooter />} />
             <Route path="seo" element={<AdminSeo />} />
             <Route path="servicos" element={<AdminServices />} />
+            <Route path="parceiros" element={<AdminPartners />} />
             <Route path="noticias" element={<AdminNews />} />
             <Route path="faq" element={<AdminFaq />} />
             <Route path="paginas" element={<AdminPages />} />

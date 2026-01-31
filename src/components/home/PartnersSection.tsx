@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
+import { usePartners } from "@/hooks/usePartners";
 
 const PartnersSection = () => {
-  // Placeholder partner logos
-  const partners = [
-    { id: 1, name: "Partner 1" },
-    { id: 2, name: "Partner 2" },
-    { id: 3, name: "Partner 3" },
-  ];
+  const { data: partners, isLoading } = usePartners();
+
+  if (isLoading || !partners || partners.length === 0) {
+    return null;
+  }
 
   return (
     <section className="py-20 bg-background">
@@ -43,16 +43,29 @@ const PartnersSection = () => {
             className="flex flex-wrap items-center justify-center gap-8"
           >
             {partners.map((partner, index) => (
-              <motion.div
+              <motion.a
                 key={partner.id}
+                href={partner.website_url || "#"}
+                target={partner.website_url ? "_blank" : undefined}
+                rel={partner.website_url ? "noopener noreferrer" : undefined}
                 initial={{ opacity: 0, scale: 0.9 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: index * 0.1 }}
-                className="w-32 h-20 bg-muted rounded-xl flex items-center justify-center grayscale hover:grayscale-0 transition-all"
+                className="w-32 h-20 bg-muted rounded-xl flex items-center justify-center grayscale hover:grayscale-0 transition-all overflow-hidden p-2"
               >
-                <span className="text-foreground/30 font-medium text-sm">Logo {partner.id}</span>
-              </motion.div>
+                {partner.logo_url ? (
+                  <img
+                    src={partner.logo_url}
+                    alt={partner.name}
+                    className="max-w-full max-h-full object-contain"
+                  />
+                ) : (
+                  <span className="text-foreground/30 font-medium text-sm text-center">
+                    {partner.name}
+                  </span>
+                )}
+              </motion.a>
             ))}
           </motion.div>
         </div>
