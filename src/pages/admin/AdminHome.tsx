@@ -192,7 +192,9 @@ const AdminHome = () => {
       fields: [
         { path: "badge", label: "Badge", type: "text" },
         { path: "title", label: "Título", type: "text" },
+        { path: "subtitle", label: "Subtítulo", type: "text" },
         { path: "description", label: "Descrição", type: "textarea" },
+        { path: "image_url", label: "Imagem Circular", type: "image" },
         { path: "card1_title", label: "Card 1 - Título", type: "text" },
         {
           path: "card1_description",
@@ -250,6 +252,18 @@ const AdminHome = () => {
         { path: "subtitle", label: "Subtítulo", type: "text" },
         { path: "button1_text", label: "Texto Botão 1", type: "text" },
         { path: "button2_text", label: "Texto Botão 2", type: "text" },
+      ],
+    },
+    {
+      key: "news",
+      title: "Seção Notícias",
+      icon: FileText,
+      fields: [
+        { path: "badge", label: "Badge", type: "text" },
+        { path: "title", label: "Título", type: "text" },
+        { path: "subtitle", label: "Subtítulo", type: "text" },
+        { path: "description", label: "Descrição", type: "textarea" },
+        { path: "image_url", label: "Imagem de Destaque", type: "image" },
       ],
     },
   ];

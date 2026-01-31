@@ -2,12 +2,15 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useNews } from "@/hooks/useNews";
+import { useHomeSections } from "@/hooks/useHomeSections";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, FileText } from "lucide-react";
 
 const NewsSection = () => {
   const { data: news, isLoading } = useNews(4);
+  const { data: sections } = useHomeSections();
+  const newsContent = sections?.news;
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) return { day: "", month: "" };
@@ -36,19 +39,32 @@ const NewsSection = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <span className="badge-primary mb-6">Fique sempre atualizado</span>
+            <span className="badge-primary mb-6">
+              {newsContent?.badge || "Fique sempre atualizado"}
+            </span>
             
             <h2 className="text-3xl md:text-4xl font-bold text-heading mb-4">
-              Notícias Empresariais
+              {newsContent?.title || "Notícias Empresariais"}
             </h2>
             
             <h3 className="text-xl font-semibold text-heading/80 mb-6">
-              Atualize-se com os principais acontecimentos do mundo contábil!
+              {newsContent?.subtitle || "Atualize-se com os principais acontecimentos do mundo contábil!"}
             </h3>
             
             <p className="text-body-text mb-8 leading-relaxed">
-              Acompanhe em nosso site as últimas e principais notícias sobre contabilidade e negócios. Entrevistas, análises, destaques, opiniões e muito mais.
+              {newsContent?.description || "Acompanhe em nosso site as últimas e principais notícias sobre contabilidade e negócios. Entrevistas, análises, destaques, opiniões e muito mais."}
             </p>
+
+            {/* Image preview */}
+            {newsContent?.image_url && (
+              <div className="mb-8 rounded-2xl overflow-hidden shadow-lg max-w-[300px]">
+                <img
+                  src={newsContent.image_url}
+                  alt="Notícias"
+                  className="w-full h-auto object-cover"
+                />
+              </div>
+            )}
 
             <Button className="btn-primary h-12 px-6 gap-2" asChild>
               <Link to="/noticias">

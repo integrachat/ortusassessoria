@@ -55,12 +55,21 @@ export interface WhatsappCtaContent {
   button2_text: string;
 }
 
+export interface NewsSectionContent {
+  badge: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  image_url: string;
+}
+
 export interface HomeSections {
   hero: HeroContent;
   features: FeaturesContent;
   cta: CtaContent;
   workflow: WorkflowContent;
   whatsapp_cta: WhatsappCtaContent;
+  news: NewsSectionContent;
 }
 
 const defaultSections: HomeSections = {
@@ -100,6 +109,13 @@ const defaultSections: HomeSections = {
     button1_text: "WhatsApp",
     button2_text: "Ligar agora",
   },
+  news: {
+    badge: "Fique sempre atualizado",
+    title: "Notícias Empresariais",
+    subtitle: "Atualize-se com os principais acontecimentos do mundo contábil!",
+    description: "Acompanhe em nosso site as últimas e principais notícias sobre contabilidade e negócios.",
+    image_url: "",
+  },
 };
 
 export const useHomeSections = () => {
@@ -123,6 +139,7 @@ export const useHomeSections = () => {
         cta: (sections.cta as CtaContent) || defaultSections.cta,
         workflow: (sections.workflow as WorkflowContent) || defaultSections.workflow,
         whatsapp_cta: (sections.whatsapp_cta as WhatsappCtaContent) || defaultSections.whatsapp_cta,
+        news: (sections.news as NewsSectionContent) || defaultSections.news,
       };
     },
   });
