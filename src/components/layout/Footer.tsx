@@ -1,59 +1,32 @@
 import { Link } from "react-router-dom";
 import { Phone, Mail, MapPin, Facebook, Instagram, Youtube } from "lucide-react";
 import { useSiteConfig } from "@/hooks/useSiteConfig";
+import { useServices } from "@/hooks/useServices";
 
 const Footer = () => {
   const { data: config } = useSiteConfig();
-
-  const utilityLinks = [
-    { label: "Agenda do Empregador", href: "#" },
-    { label: "Declaração de Faturamento", href: "#" },
-    { label: "Certidão Negativa", href: "#" },
-    { label: "Previdência Social", href: "#" },
-    { label: "TED/DOC Bancária", href: "#" },
-  ];
+  const { data: services } = useServices();
 
   const quickLinks = [
     { label: "Home", href: "/" },
     { label: "Quem Somos", href: "/institucional" },
-    { label: "Contabilidade", href: "/servicos/contabilidade" },
-    { label: "Trabalhista", href: "/servicos/trabalhista" },
-    { label: "Diversos", href: "/servicos" },
+    { label: "Contato", href: "/contato" },
+    { label: "Notícias", href: "/noticias" },
   ];
 
-  const otherLinks = [
-    { label: "Simples Nacional", href: "#" },
-    { label: "Cadastrar Fiscal", href: "#" },
-    { label: "Modernização Social", href: "#" },
-    { label: "Encargos Sociais", href: "#" },
-    { label: "IRPF", href: "#" },
-  ];
+  // Get first 5 services for column 2
+  const servicesColumn1 = services?.slice(0, 5) || [];
+  // Get next 5 services for column 3
+  const servicesColumn2 = services?.slice(5, 10) || [];
 
   return (
     <footer className="bg-primary text-white">
       {/* Main footer */}
       <div className="container-custom py-16">
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-8">
-          {/* Utility Links */}
-          <div>
-            <h4 className="font-bold text-lg mb-6">Utilitários</h4>
-            <ul className="space-y-3">
-              {utilityLinks.map((link) => (
-                <li key={link.label}>
-                  <a 
-                    href={link.href} 
-                    className="text-white/70 hover:text-white transition-colors text-sm"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
           {/* Quick Links */}
           <div>
-            <h4 className="font-bold text-lg mb-6 invisible">Links</h4>
+            <h4 className="font-bold text-lg mb-6">Links Rápidos</h4>
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.label}>
@@ -68,22 +41,41 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Other Links */}
+          {/* Services Column 1 */}
           <div>
-            <h4 className="font-bold text-lg mb-6 invisible">Outros</h4>
+            <h4 className="font-bold text-lg mb-6">Serviços</h4>
             <ul className="space-y-3">
-              {otherLinks.map((link) => (
-                <li key={link.label}>
-                  <a 
-                    href={link.href}
+              {servicesColumn1.map((service) => (
+                <li key={service.id}>
+                  <Link 
+                    to={`/servicos/${service.slug}`}
                     className="text-white/70 hover:text-white transition-colors text-sm"
                   >
-                    {link.label}
-                  </a>
+                    {service.title}
+                  </Link>
                 </li>
               ))}
             </ul>
           </div>
+
+          {/* Services Column 2 */}
+          {servicesColumn2.length > 0 && (
+            <div>
+              <h4 className="font-bold text-lg mb-6 invisible">Mais Serviços</h4>
+              <ul className="space-y-3">
+                {servicesColumn2.map((service) => (
+                  <li key={service.id}>
+                    <Link 
+                      to={`/servicos/${service.slug}`}
+                      className="text-white/70 hover:text-white transition-colors text-sm"
+                    >
+                      {service.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
 
           {/* Contact */}
           <div>
