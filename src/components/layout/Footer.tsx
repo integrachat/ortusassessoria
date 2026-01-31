@@ -134,8 +134,15 @@ const Footer = () => {
         <div className="container-custom py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-white/50">
             <p>
-              Copyright © {new Date().getFullYear()} | Direito reservado por{" "}
-              <span className="text-white">{config?.company_name || "Escritório Contábil"}</span>
+              Desenvolvido por{" "}
+              <a 
+                href="https://hubcarioca.com.br" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-white hover:underline transition-colors"
+              >
+                HUB CARIOCA
+              </a>
             </p>
             <div className="flex gap-6">
               <Link to="/politica-privacidade" className="hover:text-white transition-colors">
