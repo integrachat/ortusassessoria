@@ -3,15 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { Globe, User, Lock, AlertTriangle } from "lucide-react";
+import { Globe, User, Lock, AlertTriangle, CheckCircle, Info } from "lucide-react";
+import { InstallData } from "@/pages/Install";
 
 interface Props {
-  data: {
-    siteUrl: string;
-    adminEmail: string;
-    adminPassword: string;
-  };
-  updateData: (data: Partial<Props["data"]>) => void;
+  data: InstallData;
+  updateData: (data: Partial<InstallData>) => void;
   onNext: () => void;
   onPrev: () => void;
 }
@@ -55,6 +52,25 @@ const InstallConfig = ({ data, updateData, onNext, onPrev }: Props) => {
     }
   };
 
+  const passwordStrength = () => {
+    const pwd = data.adminPassword;
+    if (!pwd) return { level: 0, text: "", color: "" };
+    
+    let score = 0;
+    if (pwd.length >= 8) score++;
+    if (pwd.length >= 12) score++;
+    if (/[A-Z]/.test(pwd)) score++;
+    if (/[a-z]/.test(pwd)) score++;
+    if (/[0-9]/.test(pwd)) score++;
+    if (/[^A-Za-z0-9]/.test(pwd)) score++;
+
+    if (score <= 2) return { level: 1, text: "Fraca", color: "bg-red-500" };
+    if (score <= 4) return { level: 2, text: "Média", color: "bg-amber-500" };
+    return { level: 3, text: "Forte", color: "bg-green-500" };
+  };
+
+  const strength = passwordStrength();
+
   return (
     <div className="space-y-6">
       <div>
@@ -87,9 +103,19 @@ const InstallConfig = ({ data, updateData, onNext, onPrev }: Props) => {
               <p className="text-sm text-destructive mt-1">{errors.siteUrl}</p>
             )}
             <p className="text-sm text-muted-foreground mt-1">
-              Informe a URL completa onde o site será acessado
+              Informe o domínio que você configurou na Hostinger
             </p>
           </div>
+
+          <Card className="border-blue-200 bg-blue-50">
+            <CardContent className="p-3 flex gap-2">
+              <Info className="h-4 w-4 text-blue-600 flex-shrink-0 mt-0.5" />
+              <p className="text-xs text-blue-700">
+                Na Hostinger, seu domínio pode ser acessado em <strong>Domínios → Gerenciar</strong>.
+                Certifique-se de que o SSL está ativo para usar HTTPS.
+              </p>
+            </CardContent>
+          </Card>
         </CardContent>
       </Card>
 
@@ -132,6 +158,23 @@ const InstallConfig = ({ data, updateData, onNext, onPrev }: Props) => {
                   {errors.adminPassword}
                 </p>
               )}
+              {data.adminPassword && (
+                <div className="mt-2">
+                  <div className="flex gap-1 mb-1">
+                    {[1, 2, 3].map((i) => (
+                      <div
+                        key={i}
+                        className={`h-1 flex-1 rounded ${
+                          i <= strength.level ? strength.color : "bg-muted"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Força: {strength.text}
+                  </p>
+                </div>
+              )}
             </div>
             <div>
               <Label htmlFor="confirmPassword">Confirmar Senha</Label>
@@ -148,6 +191,12 @@ const InstallConfig = ({ data, updateData, onNext, onPrev }: Props) => {
                   {errors.confirmPassword}
                 </p>
               )}
+              {confirmPassword && confirmPassword === data.adminPassword && (
+                <div className="flex items-center gap-1 mt-2 text-green-600">
+                  <CheckCircle className="h-4 w-4" />
+                  <span className="text-xs">Senhas conferem</span>
+                </div>
+              )}
             </div>
           </div>
         </CardContent>
@@ -161,8 +210,7 @@ const InstallConfig = ({ data, updateData, onNext, onPrev }: Props) => {
             <p className="font-medium text-amber-800">Dica de Segurança</p>
             <p className="text-sm text-amber-700">
               Use uma senha forte com letras maiúsculas, minúsculas, números e
-              caracteres especiais. Após a instalação, considere alterar a URL
-              de acesso ao admin.
+              caracteres especiais. Guarde essas credenciais em local seguro.
             </p>
           </div>
         </CardContent>

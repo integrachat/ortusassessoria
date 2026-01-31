@@ -1,16 +1,27 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { CheckCircle, Loader2, Database, FileText, Settings, Image, Copy, Check } from "lucide-react";
+import { 
+  CheckCircle, 
+  Loader2, 
+  Database, 
+  FileText, 
+  Settings, 
+  Image, 
+  Copy, 
+  Check, 
+  Download,
+  Users,
+  HelpCircle
+} from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { InstallData } from "@/pages/Install";
 
 interface Props {
-  data: {
-    migrationComplete: boolean;
-  };
-  updateData: (data: Partial<Props["data"]>) => void;
+  data: InstallData;
+  updateData: (data: Partial<InstallData>) => void;
   onNext: () => void;
   onPrev: () => void;
 }
@@ -19,7 +30,8 @@ interface MigrationStep {
   id: string;
   name: string;
   icon: React.ElementType;
-  status: "pending" | "running" | "complete";
+  status: "pending" | "running" | "complete" | "error";
+  count?: number;
 }
 
 const InstallMigration = ({ data, updateData, onNext, onPrev }: Props) => {
@@ -29,8 +41,9 @@ const InstallMigration = ({ data, updateData, onNext, onPrev }: Props) => {
     { id: "config", name: "Configurações do site", icon: Settings, status: "pending" },
     { id: "services", name: "Serviços", icon: FileText, status: "pending" },
     { id: "news", name: "Notícias", icon: FileText, status: "pending" },
-    { id: "faq", name: "Perguntas frequentes", icon: FileText, status: "pending" },
-    { id: "pages", name: "Páginas institucionais", icon: FileText, status: "pending" },
+    { id: "faq", name: "Perguntas frequentes", icon: HelpCircle, status: "pending" },
+    { id: "pages", name: "Páginas", icon: FileText, status: "pending" },
+    { id: "partners", name: "Parceiros", icon: Users, status: "pending" },
     { id: "home", name: "Seções da home", icon: Image, status: "pending" },
   ]);
   const [exportData, setExportData] = useState<string>("");
@@ -39,63 +52,145 @@ const InstallMigration = ({ data, updateData, onNext, onPrev }: Props) => {
   const completedSteps = steps.filter((s) => s.status === "complete").length;
   const progress = (completedSteps / steps.length) * 100;
 
-  const updateStep = (id: string, status: MigrationStep["status"]) => {
+  const updateStep = (id: string, status: MigrationStep["status"], count?: number) => {
     setSteps((prev) =>
-      prev.map((step) => (step.id === id ? { ...step, status } : step))
+      prev.map((step) => (step.id === id ? { ...step, status, count } : step))
     );
+  };
+
+  const escapeSQL = (str: string | null | undefined): string => {
+    if (str === null || str === undefined) return "NULL";
+    return `'${String(str).replace(/'/g, "''").replace(/\\/g, "\\\\")}'`;
   };
 
   const exportAllData = async () => {
     setMigrating(true);
     
     try {
+      let sql = `-- ============================================
+-- Script de Migração de Dados
+-- Gerado em: ${new Date().toLocaleString("pt-BR")}
+-- Para: MySQL na Hostinger
+-- ============================================
+
+-- IMPORTANTE: Execute este script APÓS criar as tabelas
+
+`;
+
       // Buscar configurações do site
       updateStep("config", "running");
       const { data: siteConfig } = await supabase.from("site_config").select("*");
-      await new Promise((r) => setTimeout(r, 500));
-      updateStep("config", "complete");
+      if (siteConfig && siteConfig.length > 0) {
+        sql += `-- Configurações do Site (${siteConfig.length} registros)\n`;
+        sql += `DELETE FROM site_config WHERE 1=1;\n`;
+        siteConfig.forEach((item) => {
+          sql += `INSERT INTO site_config (id, \`key\`, value) VALUES (${escapeSQL(item.id)}, ${escapeSQL(item.key)}, ${escapeSQL(item.value)});\n`;
+        });
+        sql += "\n";
+      }
+      await new Promise((r) => setTimeout(r, 300));
+      updateStep("config", "complete", siteConfig?.length || 0);
 
       // Buscar serviços
       updateStep("services", "running");
       const { data: services } = await supabase.from("services").select("*");
-      await new Promise((r) => setTimeout(r, 500));
-      updateStep("services", "complete");
+      if (services && services.length > 0) {
+        sql += `-- Serviços (${services.length} registros)\n`;
+        sql += `DELETE FROM services WHERE 1=1;\n`;
+        services.forEach((item) => {
+          sql += `INSERT INTO services (id, title, slug, description, content, icon, order_index, is_active) VALUES (${escapeSQL(item.id)}, ${escapeSQL(item.title)}, ${escapeSQL(item.slug)}, ${escapeSQL(item.description)}, ${escapeSQL(item.content)}, ${escapeSQL(item.icon)}, ${item.order_index || 0}, ${item.is_active ? 1 : 0});\n`;
+        });
+        sql += "\n";
+      }
+      await new Promise((r) => setTimeout(r, 300));
+      updateStep("services", "complete", services?.length || 0);
 
       // Buscar notícias
       updateStep("news", "running");
       const { data: news } = await supabase.from("news").select("*");
-      await new Promise((r) => setTimeout(r, 500));
-      updateStep("news", "complete");
+      if (news && news.length > 0) {
+        sql += `-- Notícias (${news.length} registros)\n`;
+        sql += `DELETE FROM news WHERE 1=1;\n`;
+        news.forEach((item) => {
+          sql += `INSERT INTO news (id, title, slug, excerpt, content, image_url, is_published) VALUES (${escapeSQL(item.id)}, ${escapeSQL(item.title)}, ${escapeSQL(item.slug)}, ${escapeSQL(item.excerpt)}, ${escapeSQL(item.content)}, ${escapeSQL(item.image_url)}, ${item.is_published ? 1 : 0});\n`;
+        });
+        sql += "\n";
+      }
+      await new Promise((r) => setTimeout(r, 300));
+      updateStep("news", "complete", news?.length || 0);
 
       // Buscar FAQ
       updateStep("faq", "running");
       const { data: faq } = await supabase.from("faq").select("*");
-      await new Promise((r) => setTimeout(r, 500));
-      updateStep("faq", "complete");
+      if (faq && faq.length > 0) {
+        sql += `-- FAQ (${faq.length} registros)\n`;
+        sql += `DELETE FROM faq WHERE 1=1;\n`;
+        faq.forEach((item) => {
+          sql += `INSERT INTO faq (id, question, answer, order_index, is_active) VALUES (${escapeSQL(item.id)}, ${escapeSQL(item.question)}, ${escapeSQL(item.answer)}, ${item.order_index || 0}, ${item.is_active ? 1 : 0});\n`;
+        });
+        sql += "\n";
+      }
+      await new Promise((r) => setTimeout(r, 300));
+      updateStep("faq", "complete", faq?.length || 0);
 
       // Buscar páginas
       updateStep("pages", "running");
       const { data: pages } = await supabase.from("pages").select("*");
-      await new Promise((r) => setTimeout(r, 500));
-      updateStep("pages", "complete");
+      if (pages && pages.length > 0) {
+        sql += `-- Páginas (${pages.length} registros)\n`;
+        sql += `DELETE FROM pages WHERE 1=1;\n`;
+        pages.forEach((item) => {
+          sql += `INSERT INTO pages (id, title, slug, content, meta_description, is_published) VALUES (${escapeSQL(item.id)}, ${escapeSQL(item.title)}, ${escapeSQL(item.slug)}, ${escapeSQL(item.content)}, ${escapeSQL(item.meta_description)}, ${item.is_published ? 1 : 0});\n`;
+        });
+        sql += "\n";
+      }
+      await new Promise((r) => setTimeout(r, 300));
+      updateStep("pages", "complete", pages?.length || 0);
+
+      // Buscar parceiros
+      updateStep("partners", "running");
+      const { data: partners } = await supabase.from("partners").select("*");
+      if (partners && partners.length > 0) {
+        sql += `-- Parceiros (${partners.length} registros)\n`;
+        sql += `DELETE FROM partners WHERE 1=1;\n`;
+        partners.forEach((item) => {
+          sql += `INSERT INTO partners (id, name, logo_url, website_url, order_index, is_active) VALUES (${escapeSQL(item.id)}, ${escapeSQL(item.name)}, ${escapeSQL(item.logo_url)}, ${escapeSQL(item.website_url)}, ${item.order_index || 0}, ${item.is_active ? 1 : 0});\n`;
+        });
+        sql += "\n";
+      }
+      await new Promise((r) => setTimeout(r, 300));
+      updateStep("partners", "complete", partners?.length || 0);
 
       // Buscar seções da home
       updateStep("home", "running");
       const { data: homeSections } = await supabase.from("home_sections").select("*");
-      await new Promise((r) => setTimeout(r, 500));
-      updateStep("home", "complete");
+      if (homeSections && homeSections.length > 0) {
+        sql += `-- Seções da Home (${homeSections.length} registros)\n`;
+        sql += `DELETE FROM home_sections WHERE 1=1;\n`;
+        homeSections.forEach((item) => {
+          const contentJson = JSON.stringify(item.content).replace(/'/g, "''");
+          sql += `INSERT INTO home_sections (id, section_key, content) VALUES (${escapeSQL(item.id)}, ${escapeSQL(item.section_key)}, '${contentJson}');\n`;
+        });
+        sql += "\n";
+      }
+      await new Promise((r) => setTimeout(r, 300));
+      updateStep("home", "complete", homeSections?.length || 0);
 
-      // Gerar script SQL de inserção
-      const sqlScript = generateInsertSQL({
-        site_config: siteConfig || [],
-        services: services || [],
-        news: news || [],
-        faq: faq || [],
-        pages: pages || [],
-        home_sections: homeSections || [],
-      });
+      sql += `-- ============================================
+-- FIM DA MIGRAÇÃO
+-- Total de registros migrados: ${
+        (siteConfig?.length || 0) +
+        (services?.length || 0) +
+        (news?.length || 0) +
+        (faq?.length || 0) +
+        (pages?.length || 0) +
+        (partners?.length || 0) +
+        (homeSections?.length || 0)
+      }
+-- ============================================
+`;
 
-      setExportData(sqlScript);
+      setExportData(sql);
       updateData({ migrationComplete: true });
       toast({ title: "Dados exportados com sucesso!" });
     } catch (error) {
@@ -107,67 +202,6 @@ const InstallMigration = ({ data, updateData, onNext, onPrev }: Props) => {
     } finally {
       setMigrating(false);
     }
-  };
-
-  const generateInsertSQL = (data: Record<string, any[]>) => {
-    let sql = "-- Script de migração de dados\n-- Execute após criar as tabelas\n\n";
-
-    // Site Config
-    if (data.site_config.length > 0) {
-      sql += "-- Configurações do Site\n";
-      data.site_config.forEach((item) => {
-        sql += `INSERT INTO site_config (id, key, value, created_at, updated_at) VALUES ('${item.id}', '${item.key}', '${(item.value || "").replace(/'/g, "''")}', '${item.created_at}', '${item.updated_at}');\n`;
-      });
-      sql += "\n";
-    }
-
-    // Services
-    if (data.services.length > 0) {
-      sql += "-- Serviços\n";
-      data.services.forEach((item) => {
-        sql += `INSERT INTO services (id, title, slug, description, content, icon, order_index, is_active, created_at, updated_at) VALUES ('${item.id}', '${(item.title || "").replace(/'/g, "''")}', '${item.slug}', '${(item.description || "").replace(/'/g, "''")}', '${(item.content || "").replace(/'/g, "''")}', '${item.icon || "briefcase"}', ${item.order_index || 0}, ${item.is_active}, '${item.created_at}', '${item.updated_at}');\n`;
-      });
-      sql += "\n";
-    }
-
-    // News
-    if (data.news.length > 0) {
-      sql += "-- Notícias\n";
-      data.news.forEach((item) => {
-        sql += `INSERT INTO news (id, title, slug, excerpt, content, image_url, is_published, published_at, created_at, updated_at) VALUES ('${item.id}', '${(item.title || "").replace(/'/g, "''")}', '${item.slug}', '${(item.excerpt || "").replace(/'/g, "''")}', '${(item.content || "").replace(/'/g, "''")}', '${item.image_url || ""}', ${item.is_published}, '${item.published_at}', '${item.created_at}', '${item.updated_at}');\n`;
-      });
-      sql += "\n";
-    }
-
-    // FAQ
-    if (data.faq.length > 0) {
-      sql += "-- FAQ\n";
-      data.faq.forEach((item) => {
-        sql += `INSERT INTO faq (id, question, answer, order_index, is_active, created_at, updated_at) VALUES ('${item.id}', '${(item.question || "").replace(/'/g, "''")}', '${(item.answer || "").replace(/'/g, "''")}', ${item.order_index || 0}, ${item.is_active}, '${item.created_at}', '${item.updated_at}');\n`;
-      });
-      sql += "\n";
-    }
-
-    // Pages
-    if (data.pages.length > 0) {
-      sql += "-- Páginas\n";
-      data.pages.forEach((item) => {
-        sql += `INSERT INTO pages (id, title, slug, content, meta_description, is_published, created_at, updated_at) VALUES ('${item.id}', '${(item.title || "").replace(/'/g, "''")}', '${item.slug}', '${(item.content || "").replace(/'/g, "''")}', '${(item.meta_description || "").replace(/'/g, "''")}', ${item.is_published}, '${item.created_at}', '${item.updated_at}');\n`;
-      });
-      sql += "\n";
-    }
-
-    // Home Sections
-    if (data.home_sections.length > 0) {
-      sql += "-- Seções da Home\n";
-      data.home_sections.forEach((item) => {
-        const contentJson = JSON.stringify(item.content).replace(/'/g, "''");
-        sql += `INSERT INTO home_sections (id, section_key, content, created_at, updated_at) VALUES ('${item.id}', '${item.section_key}', '${contentJson}'::jsonb, '${item.created_at}', '${item.updated_at}');\n`;
-      });
-      sql += "\n";
-    }
-
-    return sql;
   };
 
   const handleCopy = async () => {
@@ -182,7 +216,7 @@ const InstallMigration = ({ data, updateData, onNext, onPrev }: Props) => {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "migration_data.sql";
+    a.download = "hostinger_migration_data.sql";
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -194,12 +228,12 @@ const InstallMigration = ({ data, updateData, onNext, onPrev }: Props) => {
           Migração de Dados
         </h2>
         <p className="text-muted-foreground">
-          Exporte todos os conteúdos cadastrados para migrar ao novo servidor
+          Exporte todos os conteúdos para migrar ao servidor Hostinger
         </p>
       </div>
 
       {/* Progress */}
-      {migrating && (
+      {(migrating || data.migrationComplete) && (
         <div>
           <Progress value={progress} className="h-2 mb-2" />
           <p className="text-sm text-muted-foreground text-center">
@@ -209,24 +243,33 @@ const InstallMigration = ({ data, updateData, onNext, onPrev }: Props) => {
       )}
 
       {/* Steps */}
-      <div className="space-y-3">
+      <div className="grid md:grid-cols-2 gap-3">
         {steps.map((step) => {
           const Icon = step.icon;
           return (
             <Card
               key={step.id}
-              className={
+              className={`transition-all ${
                 step.status === "complete"
                   ? "border-green-200 bg-green-50"
                   : step.status === "running"
                   ? "border-primary/50 bg-primary/5"
+                  : step.status === "error"
+                  ? "border-red-200 bg-red-50"
                   : ""
-              }
+              }`}
             >
               <CardContent className="p-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <Icon className="h-5 w-5 text-muted-foreground" />
-                  <span className="font-medium">{step.name}</span>
+                  <div>
+                    <span className="font-medium">{step.name}</span>
+                    {step.count !== undefined && step.status === "complete" && (
+                      <span className="text-xs text-muted-foreground ml-2">
+                        ({step.count} registros)
+                      </span>
+                    )}
+                  </div>
                 </div>
                 {step.status === "running" && (
                   <Loader2 className="h-5 w-5 animate-spin text-primary" />
@@ -242,23 +285,45 @@ const InstallMigration = ({ data, updateData, onNext, onPrev }: Props) => {
 
       {/* Export Result */}
       {exportData && (
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <span className="font-medium">Script SQL de Migração</span>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={handleCopy}>
-                {copied ? <Check className="h-4 w-4 mr-1" /> : <Copy className="h-4 w-4 mr-1" />}
-                Copiar
-              </Button>
-              <Button variant="outline" size="sm" onClick={handleDownload}>
-                Baixar .sql
-              </Button>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between mb-3">
+              <span className="font-semibold flex items-center gap-2">
+                <Database className="h-4 w-4" />
+                Script SQL de Migração
+              </span>
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" onClick={handleCopy}>
+                  {copied ? <Check className="h-4 w-4 mr-1" /> : <Copy className="h-4 w-4 mr-1" />}
+                  Copiar
+                </Button>
+                <Button variant="outline" size="sm" onClick={handleDownload}>
+                  <Download className="h-4 w-4 mr-1" />
+                  Baixar .sql
+                </Button>
+              </div>
             </div>
-          </div>
-          <pre className="bg-muted p-4 rounded-lg text-xs overflow-x-auto max-h-64 overflow-y-auto">
-            {exportData}
-          </pre>
-        </div>
+            <pre className="bg-muted p-4 rounded-lg text-xs overflow-x-auto max-h-64 overflow-y-auto font-mono">
+              {exportData}
+            </pre>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Instruções */}
+      {data.migrationComplete && (
+        <Card className="border-blue-200 bg-blue-50">
+          <CardContent className="p-4">
+            <h4 className="font-semibold text-blue-800 mb-2">Próximos Passos</h4>
+            <ol className="text-sm text-blue-700 space-y-1 list-decimal list-inside">
+              <li>Baixe o script SQL de migração</li>
+              <li>Acesse o phpMyAdmin da Hostinger</li>
+              <li>Selecione seu banco de dados</li>
+              <li>Vá na aba "SQL" e cole o script</li>
+              <li>Clique em "Executar"</li>
+            </ol>
+          </CardContent>
+        </Card>
       )}
 
       {/* Ações */}
@@ -274,7 +339,7 @@ const InstallMigration = ({ data, updateData, onNext, onPrev }: Props) => {
             </Button>
           )}
           {data.migrationComplete && (
-            <Button onClick={onNext}>Concluir Instalação</Button>
+            <Button onClick={onNext}>Próximo Passo</Button>
           )}
         </div>
       </div>
