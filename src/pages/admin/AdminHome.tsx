@@ -217,6 +217,7 @@ const AdminHome = () => {
         { path: "badge", label: "Badge", type: "text" },
         { path: "title", label: "Título", type: "text" },
         { path: "subtitle", label: "Subtítulo", type: "textarea" },
+        { path: "image_url", label: "Imagem Circular", type: "image" },
         { path: "steps.0.title", label: "Passo 1 - Título", type: "text" },
         {
           path: "steps.0.description",

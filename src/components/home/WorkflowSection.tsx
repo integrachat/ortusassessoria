@@ -49,9 +49,13 @@ const WorkflowSection = () => {
             className="relative order-2 lg:order-1"
           >
             <div className="relative max-w-[350px] mx-auto lg:mx-0">
-              {/* Circular image placeholder */}
+              {/* Circular image */}
               <div className="w-[280px] h-[280px] md:w-[350px] md:h-[350px] rounded-full overflow-hidden border-4 border-white shadow-xl mx-auto bg-muted flex items-center justify-center">
-                <Building2 size={64} className="text-foreground/20" />
+                {workflow?.image_url ? (
+                  <img src={workflow.image_url} alt="Workflow" className="w-full h-full object-cover" />
+                ) : (
+                  <Building2 size={64} className="text-foreground/20" />
+                )}
               </div>
               
               {/* Decorative circle */}

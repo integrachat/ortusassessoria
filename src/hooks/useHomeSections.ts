@@ -45,6 +45,7 @@ export interface WorkflowContent {
   badge: string;
   title: string;
   subtitle: string;
+  image_url: string;
   steps: WorkflowStep[];
 }
 
@@ -101,6 +102,7 @@ const defaultSections: HomeSections = {
     badge: "Passo a passo",
     title: "Conheça o fluxo de trabalho...",
     subtitle: "Comece agora mesmo!",
+    image_url: "",
     steps: [],
   },
   whatsapp_cta: {
