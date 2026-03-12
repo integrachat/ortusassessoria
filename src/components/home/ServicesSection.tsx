@@ -1,17 +1,7 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import { useServices } from "@/hooks/useServices";
-import { useHomeSections } from "@/hooks/useHomeSections";
-import { 
-  FileText, 
-  Calculator, 
-  Building2, 
-  Users,
-  Briefcase,
-  ChevronRight,
-  LucideIcon 
-} from "lucide-react";
+import { ArrowRight, LucideIcon, FileText, Calculator, Building2, Users, Briefcase } from "lucide-react";
 
 const iconMap: Record<string, LucideIcon> = {
   FileText,
@@ -27,113 +17,70 @@ const iconMap: Record<string, LucideIcon> = {
 
 const ServicesSection = () => {
   const { data: services } = useServices();
-  const { data: sections } = useHomeSections();
-
-  const displayServices = services?.slice(0, 4) || [];
+  const displayServices = services?.slice(0, 6) || [];
 
   return (
-    <section className="py-20 bg-gradient-coral relative overflow-hidden">
-      {/* Decorative shapes */}
-      <div className="absolute right-0 top-0 w-[400px] h-[400px] rounded-full bg-coral/50 blur-3xl" />
-      
+    <section className="py-20 bg-surface">
       <div className="container-custom">
-        <div className="grid lg:grid-cols-2 gap-16 items-start">
-          {/* Left content */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <span className="badge-primary mb-6">
-              Conheça nossas soluções
-            </span>
-            
-            <h2 className="text-3xl md:text-4xl font-bold text-heading mb-4 leading-tight">
-              Uma solução sob medida para o seu negócio!
-            </h2>
-            
-            <h3 className="text-xl font-semibold text-heading/80 mb-6">
-              Descomplicamos a vida da sua empresa e a sua.
-            </h3>
-            
-            <p className="text-body-text mb-8 leading-relaxed">
-              Somos uma empresa de contabilidade que chegou para descomplicar sua vida e economizar seu tempo e dinheiro.
-            </p>
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-14"
+        >
+          <h2 className="section-title">Nossos Serviços</h2>
+          <p className="section-subtitle mx-auto mt-4">
+            Uma solução sob medida para cada necessidade do seu negócio.
+          </p>
+        </motion.div>
 
-            {/* Image */}
-            <div className="relative max-w-[300px]">
-              <div className="w-[250px] h-[250px] md:w-[300px] md:h-[300px] rounded-full overflow-hidden border-4 border-white shadow-xl">
-                <div className="w-full h-full bg-muted flex items-center justify-center">
-                  <Briefcase size={64} className="text-foreground/20" />
-                </div>
-              </div>
-              
-              {/* CTA Button overlay */}
-              <div className="mt-6">
-                <Button className="btn-primary h-12 px-6 gap-2" asChild>
-                  <a 
-                    href="https://wa.me/5500900000000?text=Olá,%20Quero%20saber%20mais%20sobre%20suas%20soluções!"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Conheça nossas soluções
-                    <ChevronRight size={18} />
-                  </a>
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Services grid */}
-          <div className="grid sm:grid-cols-2 gap-4">
-            {displayServices.map((service, index) => {
-              const Icon = iconMap[service.icon || "FileText"] || FileText;
-              return (
-                <motion.div
-                  key={service.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+        {/* Services grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {displayServices.map((service, index) => {
+            const Icon = iconMap[service.icon || "FileText"] || FileText;
+            return (
+              <motion.div
+                key={service.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.08 }}
+              >
+                <Link
+                  to={`/servicos/${service.slug}`}
+                  className="group block bg-card rounded-2xl p-8 card-shadow h-full border border-border/50 hover:border-primary/30 transition-all"
                 >
-                  <Link
-                    to={`/servicos/${service.slug}`}
-                    className="group block bg-white rounded-2xl p-6 card-shadow hover:shadow-lg transition-all h-full"
-                  >
-                    <h4 className="font-bold text-heading mb-3 group-hover:text-primary transition-colors">
-                      {service.title}
-                    </h4>
-                    <p className="text-body-text text-sm leading-relaxed">
-                      {service.description}
-                    </p>
-                  </Link>
-                </motion.div>
-              );
-            })}
+                  <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-5 group-hover:bg-primary/20 transition-colors">
+                    <Icon size={24} className="text-primary" />
+                  </div>
+                  <h4 className="font-bold text-heading text-lg mb-3 font-heading group-hover:text-primary transition-colors">
+                    {service.title}
+                  </h4>
+                  <p className="text-body-text text-sm leading-relaxed mb-4">
+                    {service.description}
+                  </p>
+                  <span className="inline-flex items-center gap-2 text-accent font-semibold text-sm group-hover:gap-3 transition-all">
+                    Saiba mais <ArrowRight size={16} />
+                  </span>
+                </Link>
+              </motion.div>
+            );
+          })}
 
-            {/* Fallback if no services */}
-            {displayServices.length === 0 && (
-              <>
-                <div className="bg-white rounded-2xl p-6 card-shadow">
-                  <h4 className="font-bold text-heading mb-3">Assessoria</h4>
-                  <p className="text-body-text text-sm">Auxílio técnico dentro de nossa área de conhecimentos especializados.</p>
+          {displayServices.length === 0 && (
+            <>
+              {["Assessoria", "Contabilidade", "Migrar MEI para ME", "Trabalhista", "Fiscal", "Societário"].map((title, i) => (
+                <div key={i} className="bg-card rounded-2xl p-8 card-shadow border border-border/50">
+                  <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-5">
+                    <FileText size={24} className="text-primary" />
+                  </div>
+                  <h4 className="font-bold text-heading text-lg mb-3 font-heading">{title}</h4>
+                  <p className="text-body-text text-sm">Serviço especializado para sua empresa.</p>
                 </div>
-                <div className="bg-white rounded-2xl p-6 card-shadow">
-                  <h4 className="font-bold text-heading mb-3">Contabilidade</h4>
-                  <p className="text-body-text text-sm">Executamos todos os serviços pertinentes referente a rotina contábil.</p>
-                </div>
-                <div className="bg-white rounded-2xl p-6 card-shadow">
-                  <h4 className="font-bold text-heading mb-3">Migrar MEI para ME</h4>
-                  <p className="text-body-text text-sm">Oferecemos suporte completo para migrar de MEI para ME.</p>
-                </div>
-                <div className="bg-white rounded-2xl p-6 card-shadow">
-                  <h4 className="font-bold text-heading mb-3">Trabalhista</h4>
-                  <p className="text-body-text text-sm">Executamos serviços envolvidos na rotina do departamento pessoal.</p>
-                </div>
-              </>
-            )}
-          </div>
+              ))}
+            </>
+          )}
         </div>
       </div>
     </section>
