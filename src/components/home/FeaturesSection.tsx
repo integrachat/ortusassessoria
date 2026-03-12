@@ -1,108 +1,97 @@
 import { motion } from "framer-motion";
-import { Check, User, LucideIcon, Sparkles, Zap, Shield } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Building2, RefreshCw, ArrowRight, Briefcase, Users } from "lucide-react";
 import { useHomeSections } from "@/hooks/useHomeSections";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-
-const iconMap: Record<string, LucideIcon> = {
-  Check,
-  User,
-  Sparkles,
-  Zap,
-  Shield,
-};
 
 const FeaturesSection = () => {
   const { data: sections } = useHomeSections();
   const features = sections?.features;
 
-  const items = features?.items?.length ? features.items : [
+  const cards = [
     {
-      icon: "Check",
-      title: "Visão Estratégica",
-      description: "Transformamos obrigações em oportunidades de economia e potencializamos cada processo para gerar valor e inteligência para suas decisões.",
+      title: "ABRA SUA EMPRESA",
+      description: "Nosso time de especialistas dará todo direcionamento para você iniciar seu novo negócio de forma alinhada.",
+      link: "/abrir-empresa",
+      linkText: "ABRIR MINHA EMPRESA",
+      icon: Building2,
+      color: "bg-primary",
     },
     {
-      icon: "User",
-      title: "Tecnologia e Expertise",
-      description: "Utilizamos ferramentas de ponta aliadas a um time multidisciplinar altamente especializado, garantindo eficiência e precisão.",
+      title: "TRANSFORME SEU MEI",
+      description: "Analisaremos a situação do seu MEI e apresentaremos um cenário de acordo com a sua situação.",
+      link: "/servicos",
+      linkText: "TRANSFORMAR MEU MEI",
+      icon: Users,
+      color: "bg-accent",
     },
     {
-      icon: "Sparkles",
-      title: "Atendimento Personalizado",
-      description: "Cada cliente é único. Oferecemos soluções sob medida para atender às necessidades específicas do seu negócio.",
+      title: "TROQUE DE CONTADOR",
+      description: "Faremos toda a parte burocrática de migração. O processo será simples e tranquilo para você.",
+      link: "/trocar-de-contador",
+      linkText: "MIGRAR AGORA",
+      icon: RefreshCw,
+      color: "bg-primary",
+    },
+    {
+      title: "ASSESSORIA COMPLETA",
+      description: "Com nossa assessoria, você terá economia e segurança ao ter a sua empresa cuidada por especialistas.",
+      link: "/servicos",
+      linkText: "SAIBA MAIS",
+      icon: Briefcase,
+      color: "bg-accent",
     },
   ];
 
   return (
-    <section className="py-16 bg-background relative">
-      {/* Decorative wave transition */}
-      <div className="absolute -top-1 left-0 right-0">
-        <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
-          <path d="M0 60V20C240 40 480 50 720 35C960 20 1200 30 1440 20V60H0Z" className="fill-background"/>
-        </svg>
-      </div>
-
+    <section className="py-20 bg-background">
       <div className="container-custom">
-        <div className="grid lg:grid-cols-3 gap-8 items-start">
-          {/* Main text */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="lg:pr-4"
-          >
-            <h2 className="text-2xl md:text-3xl font-bold text-heading leading-tight">
-              {features?.title || "Contabilidade digital completa e pensada para sua empresa."}
-            </h2>
-            <p className="text-body-text mt-4 text-sm leading-relaxed">
-              {features?.subtitle || "Temos uma equipe totalmente dedicada a contabilidade da sua empresa que trabalha com rapidez e agilidade."}
-            </p>
-          </motion.div>
+        {/* Section header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="text-center mb-14"
+        >
+          <h2 className="section-title">
+            {features?.title || "O que faremos por você"}
+          </h2>
+          <p className="section-subtitle mx-auto mt-4">
+            {features?.subtitle || "Soluções completas para todas as necessidades da sua empresa."}
+          </p>
+        </motion.div>
 
-          {/* Feature cards carousel */}
-          <div className="lg:col-span-2">
-            <Carousel
-              opts={{
-                align: "start",
-                loop: true,
-              }}
-              className="w-full"
-            >
-              <CarouselContent className="-ml-4">
-                {items.map((feature, index) => {
-                  const Icon = iconMap[feature.icon] || Check;
-                  return (
-                    <CarouselItem key={index} className="pl-4 md:basis-1/2">
-                      <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: index * 0.1 }}
-                        className="bg-card rounded-3xl p-8 card-shadow h-full"
-                      >
-                        <div className="w-14 h-14 bg-muted rounded-2xl flex items-center justify-center mb-6">
-                          <Icon size={24} className="text-primary" />
-                        </div>
-                        <h3 className="text-xl font-bold text-heading mb-3">{feature.title}</h3>
-                        <p className="text-body-text text-sm leading-relaxed">{feature.description}</p>
-                      </motion.div>
-                    </CarouselItem>
-                  );
-                })}
-              </CarouselContent>
-              <div className="flex justify-center gap-2 mt-6">
-                <CarouselPrevious className="static translate-y-0" />
-                <CarouselNext className="static translate-y-0" />
-              </div>
-            </Carousel>
-          </div>
+        {/* Cards grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {cards.map((card, index) => {
+            const Icon = card.icon;
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <Link
+                  to={card.link}
+                  className="group block bg-card rounded-2xl p-6 card-shadow h-full border border-border/50 hover:border-primary/30 transition-all"
+                >
+                  <div className={`w-14 h-14 ${card.color} rounded-2xl flex items-center justify-center mb-5`}>
+                    <Icon size={24} className="text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-heading mb-3 font-heading group-hover:text-primary transition-colors">
+                    {card.title}
+                  </h3>
+                  <p className="text-body-text text-sm leading-relaxed mb-5">
+                    {card.description}
+                  </p>
+                  <span className="inline-flex items-center gap-2 text-accent font-semibold text-sm group-hover:gap-3 transition-all">
+                    {card.linkText} <ArrowRight size={16} />
+                  </span>
+                </Link>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

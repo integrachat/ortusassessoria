@@ -7,16 +7,18 @@ import NewsSection from "@/components/home/NewsSection";
 import WorkflowSection from "@/components/home/WorkflowSection";
 import FaqSection from "@/components/home/FaqSection";
 import PartnersSection from "@/components/home/PartnersSection";
+import StatsSection from "@/components/home/StatsSection";
 
 const Index = () => {
   return (
     <Layout>
       <HeroSection />
       <FeaturesSection />
-      <CtaSection />
       <ServicesSection />
-      <NewsSection />
       <WorkflowSection />
+      <CtaSection />
+      <StatsSection />
+      <NewsSection />
       <FaqSection />
       <PartnersSection />
     </Layout>

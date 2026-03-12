@@ -2,52 +2,60 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useHomeSections } from "@/hooks/useHomeSections";
 import { motion } from "framer-motion";
-import { Building2, RefreshCw } from "lucide-react";
+import { Building2, RefreshCw, Shield, Zap, Lock, Handshake, ChevronDown } from "lucide-react";
 
 const HeroSection = () => {
   const { data: sections } = useHomeSections();
   const hero = sections?.hero;
 
-  return (
-    <section className="relative overflow-hidden min-h-[700px]">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-hero" />
-      
-      {/* Decorative blob shapes */}
-      <div className="absolute -left-32 top-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-[40%_60%_60%_40%/60%_40%_60%_40%] bg-gradient-to-br from-primary/10 to-primary/5 blur-sm" />
-      <div className="absolute -right-20 -bottom-20 w-[300px] h-[300px] rounded-full bg-coral/30 blur-2xl" />
+  const highlights = [
+    { icon: Lock, text: "Solução contábil econômica e segura" },
+    { icon: Zap, text: "Atendimento rápido e especializado" },
+    { icon: Shield, text: "Seu negócio totalmente resguardado" },
+    { icon: Handshake, text: "Parceria e confiança" },
+  ];
 
+  return (
+    <section className="relative overflow-hidden pt-20">
+      {/* Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-background to-background" />
+      
       <div className="container-custom relative">
-        <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[700px] py-16 lg:py-24">
+        <div className="grid lg:grid-cols-2 gap-12 items-center min-h-[600px] py-16 lg:py-20">
           {/* Content */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
+            transition={{ duration: 0.7 }}
             className="max-w-xl"
           >
-            <span className="badge-primary mb-8">
-              {hero?.badge || "Escolha nosso escritório"}
+            <span className="badge-primary mb-4 text-accent font-semibold">
+              {hero?.badge || "Seja nosso cliente!"}
             </span>
             
-            <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold text-heading leading-[1.1] mb-6">
-              {hero?.title || "Descomplicamos a vida da sua empresa."}
+            <h1 className="text-4xl md:text-5xl lg:text-[3.5rem] font-bold leading-[1.1] mb-6 font-heading">
+              <span className="text-primary">
+                {hero?.title?.split(' ').slice(0, 3).join(' ') || "Descomplicamos a vida"}
+              </span>{' '}
+              <span className="text-accent">
+                {hero?.title?.split(' ').slice(3).join(' ') || "da sua empresa."}
+              </span>
             </h1>
             
-            <p className="text-base text-body-text mb-10 leading-relaxed">
-              {hero?.subtitle || "Conquiste e fidelize seus clientes com estratégias inteligentes, em uma época em que a confiança está em primeiro lugar. Encontre tudo o que precisa em um escritório de Contabilidade!"}
+            <p className="text-base text-body-text mb-8 leading-relaxed max-w-lg">
+              {hero?.subtitle || "Conquiste e fidelize seus clientes com estratégias inteligentes. Encontre tudo o que precisa em um escritório de Contabilidade!"}
             </p>
             
             <div className="flex flex-wrap items-center gap-4">
-              <Button className="btn-primary gap-2 h-14 px-8 text-base" asChild>
+              <Button className="btn-primary gap-2 h-13 px-8 text-base shadow-lg" asChild>
                 <Link to="/abrir-empresa">
-                  {hero?.button1_text || "Abrir empresa"}
+                  {hero?.button1_text || "Abra sua empresa"}
                 </Link>
               </Button>
-              <Button variant="ghost" className="btn-outline gap-2 h-14 px-6 text-base" asChild>
+              <Button className="btn-outline gap-2 h-13 px-6 text-base" asChild>
                 <Link to="/trocar-de-contador">
                   <RefreshCw size={18} />
-                  {hero?.button2_text || "Trocar de contador"}
+                  {hero?.button2_text || "Troque de contador"}
                 </Link>
               </Button>
             </div>
@@ -57,34 +65,57 @@ const HeroSection = () => {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="relative lg:justify-self-end hidden lg:block"
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="relative hidden lg:block"
           >
             <div className="relative">
-              {/* Decorative circle accent */}
-              <div className="absolute -top-4 right-1/3 w-12 h-12 bg-primary rounded-full z-10" />
-              
-              {/* Main rounded rectangle container */}
-              <div className="w-[400px] h-[500px] rounded-[100px] border-[3px] border-foreground/10 overflow-hidden relative">
-                {hero?.image_url ? (
-                  <img
-                    src={hero.image_url}
-                    alt="Contabilidade Digital"
-                    className="w-full h-full object-cover grayscale"
-                  />
-                ) : (
-                  <div className="absolute inset-0 bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
-                    <div className="text-center">
-                      <Building2 size={80} className="text-foreground/20 mx-auto mb-4" />
-                      <p className="text-foreground/40 font-medium">Sua imagem aqui</p>
-                    </div>
-                  </div>
-                )}
-              </div>
-              
-              {/* Decorative circle bottom right */}
-              <div className="absolute -bottom-4 -right-4 w-10 h-10 bg-foreground rounded-full" />
+              {hero?.image_url ? (
+                <img
+                  src={hero.image_url}
+                  alt="Contabilidade Digital"
+                  className="w-full h-[500px] object-cover rounded-3xl shadow-2xl"
+                />
+              ) : (
+                <div className="w-full h-[500px] bg-gradient-hero rounded-3xl flex items-center justify-center shadow-2xl">
+                  <Building2 size={100} className="text-primary-foreground/30" />
+                </div>
+              )}
+              {/* Overlay gradient */}
+              <div className="absolute inset-0 bg-gradient-to-t from-primary/20 to-transparent rounded-3xl" />
             </div>
+          </motion.div>
+        </div>
+
+        {/* Feature cards overlapping */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+          className="grid grid-cols-2 lg:grid-cols-4 gap-4 -mt-8 relative z-10 pb-8"
+        >
+          {highlights.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <div
+                key={index}
+                className="bg-card rounded-2xl p-6 card-shadow text-center"
+              >
+                <div className="w-12 h-12 mx-auto mb-3 bg-primary/10 rounded-xl flex items-center justify-center">
+                  <Icon size={24} className="text-primary" />
+                </div>
+                <p className="text-sm font-semibold text-heading">{item.text}</p>
+              </div>
+            );
+          })}
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <div className="flex justify-center pb-8">
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ repeat: Infinity, duration: 2 }}
+          >
+            <ChevronDown size={32} className="text-primary/40" />
           </motion.div>
         </div>
       </div>

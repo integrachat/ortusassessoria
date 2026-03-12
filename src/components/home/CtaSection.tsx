@@ -1,95 +1,59 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Building2, RefreshCw } from "lucide-react";
 import { useHomeSections } from "@/hooks/useHomeSections";
+import { useSiteConfig } from "@/hooks/useSiteConfig";
+import { MessageCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const CtaSection = () => {
   const { data: sections } = useHomeSections();
+  const { data: config } = useSiteConfig();
   const cta = sections?.cta;
+  const whatsappNumber = config?.whatsapp || "5500900000000";
 
   return (
-    <section className="py-20 bg-gradient-mint relative overflow-hidden">
-      {/* Decorative shapes */}
-      <div className="absolute -left-20 top-1/2 -translate-y-1/2 w-[300px] h-[300px] rounded-full bg-primary/5 blur-2xl" />
+    <section className="py-20 bg-gradient-hero relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute inset-0 bg-primary/90" />
+      <div className="absolute -right-32 -top-32 w-96 h-96 rounded-full bg-accent/20 blur-3xl" />
+      <div className="absolute -left-32 -bottom-32 w-96 h-96 rounded-full bg-primary-foreground/5 blur-3xl" />
       
-      <div className="container-custom">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Image */}
+      <div className="container-custom relative z-10">
+        <div className="text-center max-w-3xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="relative order-2 lg:order-1"
           >
-            <div className="relative max-w-[350px] mx-auto lg:mx-0">
-              {/* Circle decoration top */}
-              <div className="absolute -top-4 -left-4 w-8 h-8 bg-coral rounded-full" />
-              
-              {/* Main circular image */}
-              <div className="w-[280px] h-[280px] md:w-[350px] md:h-[350px] rounded-full overflow-hidden border-4 border-white shadow-xl mx-auto">
-                {cta?.image_url ? (
-                  <img
-                    src={cta.image_url}
-                    alt="Escritório Contábil"
-                    className="w-full h-full object-cover grayscale"
-                  />
-                ) : (
-                  <div className="w-full h-full bg-muted flex items-center justify-center">
-                    <Building2 size={64} className="text-foreground/20" />
-                  </div>
-                )}
-              </div>
-            </div>
-          </motion.div>
-
-          {/* Content */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="order-1 lg:order-2"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-heading mb-4">
-              {cta?.title || "Venha para Escritório Contábil"}
+            <p className="text-primary-foreground/70 text-sm font-medium mb-4 uppercase tracking-wider">
+              Garantia de satisfação
+            </p>
+            
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-primary-foreground mb-6 font-heading leading-tight">
+              {cta?.title || "Se em 30 dias você não ficar satisfeito, nós devolvemos sua mensalidade"}
             </h2>
             
-            <h3 className="text-xl font-semibold text-heading/80 mb-6">
-              {cta?.subtitle || "Escolha nosso escritório e dê adeus às preocupações com contabilidade."}
-            </h3>
-            
-            <p className="text-body-text mb-10 leading-relaxed">
-              {cta?.description || "Traga já a sua empresa para o nosso escritório e você aproveitará todos os benefícios de uma boa contabilidade. Atenderemos todas as suas necessidades contábeis com muita agilidade, presteza e de forma econômica para sua empresa."}
+            <p className="text-primary-foreground/80 text-lg mb-10 leading-relaxed">
+              {cta?.description || "Conte conosco para superar suas expectativas e impulsionar o sucesso do seu negócio."}
             </p>
 
-            {/* Action cards */}
-            <div className="grid sm:grid-cols-2 gap-4">
-              <Link 
-                to="/abrir-empresa"
-                className="group flex items-start gap-4 p-5 bg-white rounded-2xl card-shadow hover:shadow-lg transition-all"
-              >
-                <div className="w-10 h-10 bg-foreground rounded-xl flex items-center justify-center flex-shrink-0">
-                  <Building2 size={20} className="text-white" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-heading group-hover:text-primary transition-colors">Abrir Empresa</h4>
-                  <p className="text-body-text text-sm mt-1">Como abrir uma empresa? Passo a passo para tirar as ideias do papel</p>
-                </div>
-              </Link>
-
-              <Link 
-                to="/trocar-de-contador"
-                className="group flex items-start gap-4 p-5 bg-white rounded-2xl card-shadow hover:shadow-lg transition-all"
-              >
-                <div className="w-10 h-10 bg-foreground rounded-xl flex items-center justify-center flex-shrink-0">
-                  <RefreshCw size={20} className="text-white" />
-                </div>
-                <div>
-                  <h4 className="font-bold text-heading group-hover:text-primary transition-colors">Trocar de Contador</h4>
-                  <p className="text-body-text text-sm mt-1">Conosco você aproveitará todos os benefícios do melhor escritório de contabilidade.</p>
-                </div>
-              </Link>
+            <div className="flex flex-wrap justify-center gap-4">
+              <Button className="bg-accent text-accent-foreground hover:opacity-90 h-14 px-8 rounded-full font-semibold text-base shadow-lg gap-2" asChild>
+                <a
+                  href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent("Olá! Gostaria de mais informações.")}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <MessageCircle size={20} />
+                  Fale com um especialista
+                </a>
+              </Button>
+              <Button className="bg-primary-foreground/10 text-primary-foreground border-2 border-primary-foreground/30 hover:bg-primary-foreground/20 h-14 px-8 rounded-full font-semibold text-base" asChild>
+                <Link to="/servicos">
+                  Conheça nossos serviços
+                </Link>
+              </Button>
             </div>
           </motion.div>
         </div>
