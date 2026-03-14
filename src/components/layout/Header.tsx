@@ -82,12 +82,6 @@ const Header = () => {
           {/* CTA + Admin */}
           <div className="hidden lg:flex items-center gap-3">
             <Link
-              to="/admin"
-              className="p-2 rounded-lg hover:bg-muted transition-colors"
-            >
-              <Settings size={18} className="text-muted-foreground" />
-            </Link>
-            <Link
               to="/contato"
               className="bg-accent text-accent-foreground px-6 py-2.5 rounded-full font-semibold text-sm hover:opacity-90 transition-all"
             >
