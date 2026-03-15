@@ -138,12 +138,11 @@ const AdminConfig = () => {
       // Update site_config
       const { error: updateError } = await supabase
         .from("site_config")
-        .update({ value: urlData.publicUrl })
-        .eq("key", "logo_url");
+        .upsert({ key: "logo_url", value: publicUrlWithCacheBuster }, { onConflict: "key" });
 
       if (updateError) throw updateError;
 
-      setFormData((prev) => ({ ...prev, logo_url: urlData.publicUrl }));
+      setFormData((prev) => ({ ...prev, logo_url: publicUrlWithCacheBuster }));
       queryClient.invalidateQueries({ queryKey: ["site-config"] });
       queryClient.invalidateQueries({ queryKey: ["admin-site-config"] });
 
