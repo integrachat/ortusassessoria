@@ -12,11 +12,11 @@ const CtaSection = () => {
   const whatsappNumber = config?.whatsapp || "5500900000000";
 
   return (
-    <section className="py-20 bg-gradient-hero relative overflow-hidden">
+    <section className="py-20 relative overflow-hidden" style={{ background: 'linear-gradient(135deg, hsl(35, 80%, 45%) 0%, hsl(30, 85%, 50%) 50%, hsl(25, 90%, 55%) 100%)' }}>
       {/* Decorative elements */}
-      <div className="absolute inset-0 bg-primary/90" />
-      <div className="absolute -right-32 -top-32 w-96 h-96 rounded-full bg-accent/20 blur-3xl" />
-      <div className="absolute -left-32 -bottom-32 w-96 h-96 rounded-full bg-primary-foreground/5 blur-3xl" />
+      <div className="absolute inset-0 bg-black/10" />
+      <div className="absolute -right-32 -top-32 w-96 h-96 rounded-full bg-white/10 blur-3xl" />
+      <div className="absolute -left-32 -bottom-32 w-96 h-96 rounded-full bg-white/5 blur-3xl" />
       
       <div className="container-custom relative z-10">
         <div className="text-center max-w-3xl mx-auto">
