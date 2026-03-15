@@ -21,7 +21,7 @@ const PartnersSection = () => {
           className="text-center"
         >
           <h2 className="text-2xl md:text-3xl font-bold text-heading font-heading">
-            Plataformas Parceiras
+            Conheça alguns dos nossos clientes
           </h2>
         </motion.div>
       </div>
