@@ -129,10 +129,11 @@ const AdminConfig = () => {
 
       if (uploadError) throw uploadError;
 
-      // Get public URL
+      // Get public URL with cache buster
       const { data: urlData } = supabase.storage
         .from("site-assets")
         .getPublicUrl(filePath);
+      const publicUrlWithCacheBuster = `${urlData.publicUrl}?t=${Date.now()}`;
 
       // Update site_config
       const { error: updateError } = await supabase
